@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'filemanager/css/styles.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Upload Your File</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload File</button>
+        </form>
+
+        <a href="{% url 'file_list' %}" class="btn-blue">View Uploaded Files</a> <!-- Button to file list -->
+
+    </div>
+</body>
+
+</html>

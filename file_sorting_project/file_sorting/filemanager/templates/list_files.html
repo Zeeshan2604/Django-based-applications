@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Files</title>
+    {% load static %}
+    {% load custom_filters %}
+    {% load tz %}
+    <link rel="stylesheet" href="{% static 'filemanager/css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .img-preview {
+            width: 90px;
+            /* Set maximum width for file preview */
+            height: 50px;
+            /* Set maximum height for file preview */
+            margin-right: 10px;
+            /* Space between image and file name */
+        }
+
+        .file-preview {
+            width: 40px;
+            /* Set maximum width for file preview */
+            height: 40px;
+            /* Set maximum height for file preview */
+            margin-left: 30px;
+            /* Space between image and file name */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Uploaded Files</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>File Preview</th>
+                    <th>File Name</th>
+                    <th>File Type</th>
+                    <th>Upload Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- PDF Files -->
+                {% for pdf_file in pdf_files %}
+                <tr>
+                    <td>
+                        <img src="https://img.icons8.com/ios-filled/50/FF0000/pdf-2.png" alt="PDF Icon"
+                            class="file-preview">
+                    </td>
+                    <td>
+                        <a href="{{ pdf_file.file.url }}">{{ pdf_file.file.url|basename }}</a>
+                    </td>
+                    <td>PDF</td>
+                    <td>{{ pdf_file.uploaded_at|localtime|date:"Y-m-d H:i:s" }}</td>
+                </tr>
+                {% endfor %}
+
+                <!-- Image Files -->
+                {% for image_file in image_files %}
+                <tr>
+                    <td>
+                        <img src="{{ image_file.file.url }}" alt="Image Preview" class="img-preview">
+                    </td>
+                    <td>
+                        <a href="{{ image_file.file.url }}">{{ image_file.file.url|basename }}</a>
+                    </td>
+                    <td>Image</td>
+                    <td>{{ image_file.uploaded_at|localtime|date:"Y-m-d H:i:s" }}</td>
+                </tr>
+                {% endfor %}
+
+                <!-- Other Files -->
+                {% for other_file in other_files %}
+                <tr>
+                    <td>
+                        <img src="https://img.icons8.com/ios-filled/50/000000/file.png" alt="File Icon"
+                            class="file-preview">
+                    </td>
+                    <td>
+                        <a href="{{ other_file.file.url }}">{{ other_file.file.url|basename }}</a>
+                    </td>
+                    <td>Other</td>
+                    <td>{{ other_file.uploaded_at|localtime|date:"Y-m-d H:i:s" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'upload' %}" class="btn">Upload Another File</a>
+    </div>
+</body>
+
+</html>
