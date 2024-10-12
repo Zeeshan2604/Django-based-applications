@@ -1,4 +1,4 @@
-# Step-by-Step Guide to Running the Django Project for Sorting Files
+# Step-by-Step Guide to Run the Django Project for Sorting Files
 
 ## Prerequisites
 Before you start, ensure you have the following installed on your system:
