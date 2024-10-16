@@ -1,0 +1,16 @@
+<!-- templates/admin/base_site.html -->
+{% extends "admin/base_site.html" %}
+{% block title %} My Custom Admin {% endblock %}
+{% block extrahead %}
+{{ block.super }}
+<link rel="icon" type="image/png" href="{% static 'myapp/images/favicon.ico' %}">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    /* Hide the dark mode toggle button */
+    .toggle-darkmode {
+        display: none !important;
+    }
+</style>
+
+{% endblock %}

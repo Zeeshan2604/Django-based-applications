@@ -1,0 +1,73 @@
+/* General Background & Colors */
+body {
+    background-color: #f0f4f8 !important;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+/* Header Styling */
+#header {
+    background-color: #0c7443 !important;
+    border-bottom: 3px solid #2ddf95 !important;
+}
+
+#header h1 {
+    color: #f1faee !important;
+    font-size: 28px !important;
+}
+
+#user-tools {
+    color: #f1faee !important;
+}
+
+/* Sidebar Styling */
+#nav-sidebar {
+    background-color: #a8dadc !important;
+    border-right: 1px solid #457b9d !important;
+}
+
+#nav-sidebar a {
+    color: #1d3557 !important;
+}
+
+/* Button Styling */
+.button {
+    background-color: #457b9d !important;
+    border-color: #1d3557 !important;
+    color: #ffffff !important;
+}
+
+.button:hover {
+    background-color: #1d3557 !important;
+    color: #ffffff !important;
+}
+
+/* Form Input Styling */
+input,
+select,
+textarea {
+    background-color: #ffffff !important;
+    border: 1px solid #457b9d !important;
+    color: #1d3557 !important;
+    padding: 8px !important;
+}
+
+/* Table Styling */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+th {
+    background-color: #1d3557 !important;
+    color: #ffffff !important;
+    padding: 10px;
+}
+
+td {
+    background-color: #f1faee !important;
+    color: #1d3557 !important;
+    padding: 10px;
+    border-bottom: 1px solid #457b9d !important;
+}
