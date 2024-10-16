@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Devices</title>
+    <!-- Bootstrap CSS and JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Available Devices</h1>
+        <div class="card">
+            <div class="card-body">
+                <form method="GET" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search devices..." value="{{ request.GET.search }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+                <ul class="list-group">
+                    {% if devices %}
+                    <ul class="list-group">
+                        {% for device in devices %}
+                        <li class="list-group-item">
+                            <a href="{% url 'device_detail' device.id %}">{{ device.name }}</a> - ${{ device.base_price }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-center">No devices available.</p>
+                    {% endif %}
+
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- Button to Open Modal -->
+    <div class="text-center mt-3">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addDeviceModal">
+            Add Device
+        </button>
+    </div>
+    
+    <!-- Add Device Modal -->
+    <div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDeviceModalLabel">Add New Device</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDeviceForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="base_price">Base Price</label>
+                            <input type="number" class="form-control" id="base_price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock</label>
+                            <input type="number" class="form-control" id="stock" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="text" class="form-control" id="category" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="manufacturer">Manufacturer</label>
+                            <input type="text" class="form-control" id="manufacturer" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Device</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    $(document).ready(function () {
+        $('#addDeviceForm').on('submit', function (event) {
+            event.preventDefault();  // Prevent form submission
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "add_device" %}',
+                data: {
+                    name: $('#name').val(),
+                    base_price: $('#base_price').val(),
+                    description: $('#description').val(),
+                    stock: $('#stock').val(),
+                    category: $('#category').val(),
+                    manufacturer: $('#manufacturer').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'  // Include CSRF token
+                },
+                success: function (response) {
+                    // Optionally, update the device list dynamically or refresh the page
+                    $('#addDeviceModal').modal('hide');  // Hide the modal
+                    location.reload();  // Refresh the page to see the updated list
+                },
+                error: function (response) {
+                    alert('Error adding device. Please try again.');
+                }
+            });
+        });
+    });
+</script>
+
+</html>

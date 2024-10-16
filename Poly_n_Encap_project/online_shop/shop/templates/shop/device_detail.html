@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ device.name }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">{{ device.name }}</h1>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>Price:</strong> ${{ device.base_price }}</p>
+                <p><strong>Description:</strong> {{ device.description }}</p>
+                <p><strong>Stock:</strong> {{ stock }}</p> <!-- Accessing stock property -->
+                <p><strong>Category:</strong> {{ device.get_device_type }}</p>
+                <p><strong>Manufacturer:</strong> {{ device.get_manf }}</p>
+                <a href="{% url 'device_list' %}" class="btn btn-primary">Back to Devices</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
