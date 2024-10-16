@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to PDF Converter</title>
+    <link rel="stylesheet" href="{% static 'converter/styles.css' %}">
+</head>
+
+<body>
+    <div class="background-animation"></div>
+    <div class="form-container">
+        <h1>HTML to PDF Converter</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="file-upload">
+                <label for="file" class="custom-file-upload">
+                    <input type="file" id="file" name="file" required />
+                    Choose File
+                </label>
+                <span id="file-name" class="file-name">No file chosen</span>
+            </div>
+            <button  type="submit">Convert to PDF</button>
+        </form>
+        {% if form.errors %}
+        <div class="error-message">
+            <p>Please correct the errors below:</p>
+            {{ form.errors }}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const numCubes = 20; // Number of cubes to create
+        const background = document.querySelector('.background-animation');
+
+        for (let i = 0; i < numCubes; i++) {
+            const cube = document.createElement('div');
+            cube.classList.add('cube');
+            cube.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+            cube.style.animationDuration = `${Math.random() * 5 + 5}s`; // Random speed between 5s and 10s
+            background.appendChild(cube);
+        }
+
+        const fileInput = document.getElementById('file');
+            const fileNameDisplay = document.getElementById('file-name');
+
+            fileInput.addEventListener('change', function () {
+                if (fileInput.files.length > 0) {
+                    fileNameDisplay.textContent = fileInput.files[0].name; // Set file name
+                } else {
+                    fileNameDisplay.textContent = "No file chosen"; // Reset if no file
+                }
+            });
+    </script>
+</body>
+
+</html>
