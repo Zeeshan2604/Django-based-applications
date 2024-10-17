@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select State in India</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #b3e5fc; /* Lightish blue background */
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            position: relative;
+            width: 400px;
+            padding: 30px;
+            background: #fff;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 10;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        select, button {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .loading {
+            display: none;
+            color: #333;
+            font-size: 18px;
+        }
+
+        /* Background floating shapes */
+        .shape {
+            position: absolute;
+            bottom: -150px;
+            background-color: #0288d1; /* Darker blue shapes */
+            opacity: 0.7;
+            z-index: 1;
+            animation: float 10s infinite linear;
+        }
+
+        /* Shapes */
+        .shape.circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .shape.rounded-square {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+        }
+        .shape.square {
+            width: 80px;
+            height: 80px;
+        }
+        .shape.triangle {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid #0288d1;
+        }
+        .shape.star {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 60px solid #0288d1;
+            position: relative;
+        }
+        .shape.star:before {
+            content: '';
+            position: absolute;
+            top: -45px;
+            left: -30px;
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-top: 60px solid #0288d1;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-1200px) rotate(360deg);
+            }
+        }
+
+        /* Different speeds for different shapes */
+        .shape:nth-child(2) {
+            animation-duration: 18s;
+        }
+        .shape:nth-child(3) {
+            animation-duration: 15s;
+        }
+        .shape:nth-child(4) {
+            animation-duration: 12s;
+        }
+        .shape:nth-child(5) {
+            animation-duration: 20s;
+        }
+        .shape:nth-child(6) {
+            animation-duration: 25s;
+        }
+        .shape:nth-child(7) {
+            animation-duration: 22s;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Background shapes -->
+    <div class="shape circle" style="left: 20%;"></div>
+    <div class="shape rounded-square" style="left: 70%;"></div>
+    <div class="shape square" style="left: 30%;"></div>
+    <div class="shape triangle" style="left: 50%;"></div>
+    <div class="shape star" style="left: 10%;"></div>
+    <div class="shape rounded-square" style="left: 80%;"></div>
+    <div class="shape circle" style="left: 60%;"></div>
+
+    <div class="container">
+        <h1>Select State in India</h1>
+        <form id="cityForm" onsubmit="fetchCities(event)">
+            <!-- No country dropdown as India is hardcoded -->
+            <select id="state" required>
+                <option value="">Select State</option>
+            </select>
+
+            <button type="submit">Get Cities in CSV</button>
+        </form>
+
+        <div class="loading" id="loading">
+            Fetching cities, please wait...
+        </div>
+    </div>
+
+    <script>
+        // Fetch states for India when the page loads
+        window.onload = function() {
+            fetch('/get-states/')
+            .then(response => response.json())
+            .then(data => {
+                let stateSelect = document.getElementById('state');
+                data.forEach(state => {
+                    let option = document.createElement('option');
+                    option.value = state.iso2;
+                    option.textContent = state.name;
+                    stateSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching states:', error));
+        };
+
+        // Fetch cities and trigger CSV download
+        function fetchCities(event) {
+            event.preventDefault();
+            let state = document.getElementById('state').value;
+            let loadingDiv = document.getElementById('loading');
+
+            if (!state) {
+                alert('Please select a state.');
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
+
+            // Make an AJAX request to fetch the CSV
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', `/fetch-cities/?state_code=${state}`, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var blob = new Blob([xhr.response], { type: 'text/csv' });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'cities.csv';
+                    link.click();
+                } else {
+                    alert('Error fetching cities');
+                }
+                loadingDiv.style.display = 'none';
+            };
+
+            xhr.onerror = function() {
+                alert('Request failed. Please try again.');
+                loadingDiv.style.display = 'none';
+            };
+
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
